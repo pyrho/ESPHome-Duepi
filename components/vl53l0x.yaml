@@ -1,8 +1,9 @@
 # I2C bus configuration for ESP32-C3
-# Using GPIO 8 (SDA) and GPIO 9 (SCL) - common ESP32-C3 I2C pins
+# Do not use GPIO 8/9 for I2C, and these are strapping pins used to set boot mode
+# 6/7 are safe
 i2c:
-  sda: GPIO8
-  scl: GPIO9
+  sda: GPIO6
+  scl: GPIO7
   scan: true
 
 # VL53L0X distance sensor for pellet level
