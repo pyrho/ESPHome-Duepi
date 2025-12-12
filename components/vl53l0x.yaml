@@ -1,0 +1,34 @@
+# I2C bus configuration for ESP32-C3
+# Using GPIO 8 (SDA) and GPIO 9 (SCL) - common ESP32-C3 I2C pins
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  scan: true
+
+# VL53L0X distance sensor for pellet level
+sensor:
+  - platform: vl53l0x
+    name: "Pellet Distance"
+    id: pellet_distance
+    address: 0x29
+    update_interval: 60s
+    long_range: true
+    unit_of_measurement: "m"
+
+  # Optional: Convert distance to pellet level percentage
+  - platform: template
+    name: "Pellet Level"
+    id: pellet_level
+    unit_of_measurement: "%"
+    icon: "mdi:gauge"
+    lambda: |-
+      // Adjust these values to your container dimensions (in meters)
+      float empty_distance = 0.55;  // distance when empty
+      float full_distance = 0.02;   // distance when full
+      float current = id(pellet_distance).state;
+      if (isnan(current)) return NAN;
+      float level = (empty_distance - current) / (empty_distance - full_distance) * 100.0;
+      if (level > 100) return 100.0;
+      if (level < 0) return 0.0;
+      return level;
+    update_interval: 60s
