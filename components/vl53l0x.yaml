@@ -24,8 +24,8 @@ sensor:
     icon: "mdi:gauge"
     lambda: |-
       // Adjust these values to your container dimensions (in meters)
-      float empty_distance = 0.55;  // distance when empty
-      float full_distance = 0.02;   // distance when full
+      float empty_distance = 0.54;  // distance when empty
+      float full_distance = 0.15;   // distance when full
       float current = id(pellet_distance).state;
       if (isnan(current)) return NAN;
       float level = (empty_distance - current) / (empty_distance - full_distance) * 100.0;
